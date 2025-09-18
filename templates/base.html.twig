@@ -1,6 +1,6 @@
 {# Базовый шаблон для Twig, определяющий каркас HTML-страницы. #}
 <!DOCTYPE html>
-<html>
+<html{% block html_attributes %} lang="en"{% endblock %}>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -11,7 +11,7 @@
         {% block javascripts %}
         {% endblock %}
     </head>
-    <body>
+    <body{% block body_attributes %}{% endblock %}>
         {% block body %}{% endblock %}
     </body>
 </html>
