@@ -1,7 +1,5 @@
 <?php
 
-/** Страница приветственного сообщения Codex. */
-
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
