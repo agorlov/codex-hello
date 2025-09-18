@@ -1,22 +1,22 @@
 # codex-hello
 
-This repository contains a minimal [Symfony](https://symfony.com/) application that responds with **"Hello codex!"** on the root route.
+Этот репозиторий содержит минимальное приложение [Symfony](https://symfony.com/), которое на корневом маршруте отвечает фразой **«Hello codex!»**.
 
-## Getting started
+## Начало работы
 
-1. Install the PHP dependencies (Composer is already bundled with this project):
+1. Установите зависимости PHP (Composer уже включён в проект):
    ```bash
    composer install
    ```
-2. Start a local development server from the project root:
+2. Запустите локальный сервер разработки из корня проекта:
    ```bash
    php -S 0.0.0.0:8000 -t public
    ```
-3. Open http://localhost:8000 in your browser. You should see `Hello codex!` rendered by the Symfony application.
+3. Откройте http://localhost:8000 в браузере. Вы увидите сообщение `Hello codex!`, которое выводит приложение Symfony.
 
-## Project structure
+## Структура проекта
 
-- `src/Controller/HelloController.php` contains the controller that serves the greeting.
-- `config/routes.yaml` configures attribute-based routing for the controllers in `src/Controller`.
+- `src/Controller/HelloController.php` содержит контроллер, который отвечает за приветствие.
+- `config/routes.yaml` включает конфигурацию маршрутов на основе атрибутов для контроллеров в `src/Controller`.
 
-Feel free to extend this starter application with additional routes, templates, or services as needed.
+Дополняйте это стартовое приложение новыми маршрутами, шаблонами или сервисами по мере необходимости.
