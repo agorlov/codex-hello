@@ -1,0 +1,57 @@
+{# Шаблон приветственной страницы Codex с оформлением Tailwind CSS. #}
+<!DOCTYPE html>
+<html lang="ru" class="h-full bg-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pageTitle }}</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="h-full text-slate-100">
+<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full bg-slate-800/60 backdrop-blur shadow-xl rounded-2xl border border-slate-700 p-10">
+        <div class="flex items-center justify-between gap-4 border-b border-slate-700 pb-6 mb-6">
+            <div>
+                <p class="text-sm uppercase tracking-widest text-sky-400">Codex Playground</p>
+                <h1 class="text-3xl sm:text-4xl font-semibold mt-2">{{ greeting }}</h1>
+            </div>
+            <div class="hidden sm:flex h-16 w-16 items-center justify-center rounded-full bg-sky-500/20 text-sky-400">
+                <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v18" />
+                    <path d="M5 9l7-6 7 6" />
+                    <path d="M5 15l7 6 7-6" />
+                </svg>
+            </div>
+        </div>
+        <div class="space-y-6 text-slate-300 leading-relaxed">
+            <p>{{ introText }}</p>
+            <div class="grid gap-4 sm:grid-cols-2">
+                {% for highlight in highlights %}
+                    <div class="rounded-xl border border-slate-700/80 bg-slate-900/40 p-5">
+                        <h2 class="text-lg font-medium text-sky-300 mb-2">
+                            {{ highlight.title }}
+                        </h2>
+                        <p class="text-sm text-slate-400">
+                            {{ highlight.description }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <a href="{{ documentationUrl }}"
+               class="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/30 transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-400 focus:ring-offset-slate-900"
+               target="_blank" rel="noreferrer">
+                Читать документацию
+            </a>
+            <div class="text-xs text-slate-500">
+                © {{ "now"|date('Y') }} Codex. Создано для изучения Symfony и Tailwind.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
