@@ -1,0 +1,8 @@
+# Исключаем ненужные для сборки Docker файлы и каталоги
+.git
+.gitignore
+vendor/
+var/
+node_modules/
+docker-compose.yml
+.phpunit.cache/
