@@ -1,0 +1,15 @@
+# docker-compose.yml описывает сервис для запуска Codex Hello в Docker.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: "true"
+        APP_ENV: dev
+        APP_DEBUG: "1"
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "1"
