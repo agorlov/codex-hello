@@ -1,12 +1,14 @@
 <?php
 
+/** Страница приветственного сообщения Codex. */
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Контроллер, возвращающий приветственное сообщение на корневом маршруте.
+ * Страница приветственного сообщения Codex.
  */
 final class HelloController
 {
