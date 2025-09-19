@@ -38,4 +38,4 @@ COPY --from=vendor /app /app
 
 EXPOSE 8000
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public", "public/index.php"]
+CMD ["sh", "-c", "php bin/console app:sqlite:migrate && php -S 0.0.0.0:8000 -t public public/index.php"]
