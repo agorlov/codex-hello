@@ -2,7 +2,8 @@
 # Files in the packages/ subdirectory configure your dependencies.
 
 parameters:
-    app.sqlite.database_path: '%kernel.project_dir%/var/data/app.db'
+    app.sqlite.database_path: '%kernel.project_dir%/db-data/app.db'
+    app.sqlite.migrations_path: '%kernel.project_dir%/db-data/migrations'
 
 services:
     # default configuration for services in *this* file
@@ -23,4 +24,12 @@ services:
     App\Database\SqliteConnection:
         arguments:
             $databasePath: '%app.sqlite.database_path%'
+
+    App\Database\SqliteMigrations:
+        arguments:
+            $sqliteConnection: '@App\Database\SqliteConnection'
+
+    App\VisitLogbook:
+        arguments:
+            $migrationsDirectory: '%app.sqlite.migrations_path%'
 

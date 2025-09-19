@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Database\SqliteConnection;
 use App\Database\SqliteDatetime;
+use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
+use App\VisitLogbook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +18,27 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HelloController extends AbstractController
 {
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
+    private const DATABASE_PATH = __DIR__ . '/../../db-data/app.db';
+    private const MIGRATIONS_DIRECTORY = __DIR__ . '/../../db-data/migrations';
+
+    private readonly SqliteDatetime $sqliteDatetime;
+
+    private readonly VisitLogbook $visitLogbook;
 
     /**
-     * Инициализирует контроллер источником времени SQLite.
+     * Инициализирует контроллер источником времени SQLite и журналом посещений.
      */
-    public function __construct(
-        private readonly SqliteDatetime $sqliteDatetime,
-    ) {
+    public function __construct()
+    {
+        $sqliteConnection = new SqliteConnection(self::DATABASE_PATH);
+        $sqliteMigrations = new SqliteMigrations($sqliteConnection);
+
+        $this->sqliteDatetime = new SqliteDatetime($sqliteConnection);
+        $this->visitLogbook = new VisitLogbook(
+            $sqliteConnection,
+            $sqliteMigrations,
+            self::MIGRATIONS_DIRECTORY,
+        );
     }
 
     /**
@@ -33,9 +50,12 @@ final class HelloController extends AbstractController
         $language = $this->resolveLanguage($request);
         $randomGreeting = new RandomCodexGreeting($language);
         $currentDateTime = $this->sqliteDatetime->currentDateTime();
+        $greeting = $randomGreeting->greet();
+
+        $this->visitLogbook->recordVisit('app_home', $language, $request);
 
         return $this->render('homepage.html.twig', [
-            'greeting' => $randomGreeting->greet(),
+            'greeting' => $greeting,
             'pageTitle' => 'Codex приветствует вас',
             'introText' => 'Создайте свой первый проект, экспериментируйте с компонентами Symfony и украшайте интерфейсы при помощи Tailwind.',
             'documentationUrl' => 'https://symfony.com/doc/current/index.html',
@@ -80,4 +100,5 @@ final class HelloController extends AbstractController
 
         return self::DEFAULT_GREETING_LANGUAGE;
     }
+
 }
