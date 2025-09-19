@@ -2,7 +2,7 @@
 
 namespace App\Tests\Database;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteDatetime;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class SqliteDatetimeTest extends TestCase
         $databaseDirectory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'codex-sqlite-' . uniqid('', true);
         $databasePath = $databaseDirectory . DIRECTORY_SEPARATOR . 'time.db';
 
-        $sqliteConnection = new SqliteConnection($databasePath);
+        $sqliteConnection = new SqliteDB($databasePath);
         $sqliteDatetime = new SqliteDatetime($sqliteConnection);
         $dateTime = $sqliteDatetime->currentDateTime();
 

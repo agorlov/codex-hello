@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use PDOException;
 use Symfony\Component\HttpFoundation\Request;
 use RuntimeException;
@@ -16,7 +16,7 @@ final class VisitLogbook
      * Принимает подключение к SQLite и готовит журнал посещений для записей.
      */
     public function __construct(
-        private readonly SqliteConnection $sqliteConnection,
+        private readonly SqliteDB $sqliteConnection,
     ) {
     }
 

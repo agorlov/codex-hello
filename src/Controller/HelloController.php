@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteDatetime;
 use App\Greeting\RandomCodexGreeting;
 use App\VisitLogbook;
@@ -28,10 +28,11 @@ final class HelloController extends AbstractController
      */
     public function __construct()
     {
-        $sqliteConnection = new SqliteConnection(self::DATABASE_PATH);
+        $sqliteConnection = new SqliteDB(self::DATABASE_PATH);
+
         $this->sqliteDatetime = new SqliteDatetime($sqliteConnection);
         $this->visitLogbook = new VisitLogbook(
-            new SqliteConnection(self::DATABASE_PATH)
+            new SqliteDB(self::DATABASE_PATH)
         );
     }
 

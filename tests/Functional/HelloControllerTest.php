@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
 use ReflectionClass;
@@ -29,7 +29,7 @@ class HelloControllerTest extends WebTestCase
 
         $this->removeDatabaseArtifacts();
 
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $sqliteMigrations = new SqliteMigrations($sqliteConnection);
         $sqliteMigrations->applyMigrations($this->migrationsDirectory);
     }
@@ -131,7 +131,7 @@ class HelloControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $connection = $sqliteConnection->db();
 
         $countStatement = $connection->query('SELECT COUNT(*) AS aggregate FROM visit_log');

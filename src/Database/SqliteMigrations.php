@@ -16,7 +16,7 @@ final class SqliteMigrations
      * Запоминает поставщика SQLite-подключения для выполнения миграций.
      */
     public function __construct(
-        private readonly SqliteConnection $sqliteConnection,
+        private readonly SqliteDB $sqliteConnection,
     ) {
     }
 

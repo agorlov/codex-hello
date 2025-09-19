@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteMigrations;
 use App\VisitLogbook;
 use PDO;
@@ -28,7 +28,7 @@ class VisitLogbookTest extends TestCase
         $this->databasePath = $this->databaseDirectory . DIRECTORY_SEPARATOR . 'visit-log.db';
         $this->migrationsDirectory = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'db-data' . DIRECTORY_SEPARATOR . 'migrations';
 
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $sqliteMigrations = new SqliteMigrations($sqliteConnection);
         $sqliteMigrations->applyMigrations($this->migrationsDirectory);
     }
@@ -51,7 +51,7 @@ class VisitLogbookTest extends TestCase
      */
     public function testRecordVisitCreatesTableAndStoresEntry(): void
     {
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $visitLogbook = new VisitLogbook($sqliteConnection);
 
         $request = Request::create('/', 'GET', ['language' => 'ru'], [], [], [
@@ -80,4 +80,3 @@ class VisitLogbookTest extends TestCase
         $this->assertSame('Symfony BrowserKit', $row['user_agent']);
     }
 }
-
