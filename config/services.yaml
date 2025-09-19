@@ -2,7 +2,7 @@
 # Files in the packages/ subdirectory configure your dependencies.
 
 parameters:
-    app.sqlite.database_path: '%kernel.project_dir%/app.db'
+    app.sqlite.database_path: '%kernel.project_dir%/db-data/app.db'
     app.sqlite.migrations_path: '%kernel.project_dir%/db-data/migrations'
 
 services:
