@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HelloController extends AbstractController
 {
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
-    private const DATABASE_PATH = __DIR__ . '/../../app.db';
+    private const DATABASE_PATH = __DIR__ . '/../../db-data/app.db';
     private const MIGRATIONS_DIRECTORY = __DIR__ . '/../../db-data/migrations';
 
 

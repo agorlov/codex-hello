@@ -1,0 +1,93 @@
+{# Шаблон страницы с LLM-чатом и интерактивным окном диалога. #}
+{% extends 'base.html.twig' %}
+
+{% block html_attributes %} lang="ru" class="h-full bg-slate-950"{% endblock %}
+{% block body_attributes %} class="min-h-full bg-slate-950 text-slate-100"{% endblock %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block head_extra %}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/llm-chat.js" defer></script>
+{% endblock %}
+
+{% block body %}
+    <div class="min-h-full flex flex-col">
+        <header class="border-b border-slate-800/60 bg-slate-900/70 backdrop-blur">
+            <div class="mx-auto w-full max-w-5xl px-6 py-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-wider text-sky-400">Codex Playground</p>
+                    <h1 class="text-2xl font-semibold text-white">{{ pageTitle }}</h1>
+                </div>
+                <div class="flex flex-col items-start gap-3 text-sm text-slate-400 sm:flex-row sm:items-center">
+                    <a href="{{ path('app_home') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-700/80 px-4 py-2 transition hover:border-sky-400 hover:text-sky-300">
+                        <span aria-hidden="true">←</span>
+                        <span>На главную</span>
+                    </a>
+                    <div class="flex flex-col text-left sm:text-right">
+                        <span class="text-xs uppercase tracking-wide text-slate-500">Модель</span>
+                        <span class="font-mono text-slate-300">{{ modelName }}</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1">
+            <div class="mx-auto flex h-full max-w-5xl flex-col gap-6 px-6 py-10">
+                <section class="flex flex-1 flex-col rounded-3xl border border-slate-800/70 bg-slate-900/60 px-6 py-8 shadow-xl backdrop-blur">
+                    <div class="space-y-4 text-sm text-slate-300">
+                        <p>Общайтесь с моделью напрямую из браузера. Сообщения проходят через сервер Codex, который защищает ключ доступа.</p>
+                        {% if not llmConfigured %}
+                            <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-200 text-sm">
+                                Ключ доступа к модели ещё не настроен. Добавьте переменную окружения <code class="font-mono text-xs text-amber-100 bg-amber-500/20 px-2 py-1 rounded">LLM_KEY</code> и обновите страницу.
+                            </div>
+                        {% else %}
+                            <p class="text-xs text-slate-500">Модель отвечает с учётом контекста всей переписки. Начните диалог, задав вопрос.</p>
+                        {% endif %}
+                    </div>
+                    <div class="mt-6 flex-1 overflow-hidden rounded-2xl border border-slate-800/70 bg-slate-950/60">
+                        <div id="llm-chat-messages" class="flex h-full flex-col gap-4 overflow-y-auto px-6 py-6 text-sm leading-relaxed">
+                            <div class="self-start max-w-xl rounded-2xl border border-sky-500/30 bg-sky-500/10 px-4 py-3 text-slate-200 shadow-sm">
+                                Привет! Я готов помочь с вашим проектом Codex. Задайте вопрос, и я постараюсь ответить подробно.
+                            </div>
+                        </div>
+                    </div>
+                    <form
+                        id="llm-chat-form"
+                        action="{{ path('app_llm_chat_send') }}"
+                        method="post"
+                        class="mt-6 flex flex-col gap-4"
+                        data-system-message="{{ systemMessage }}"
+                        data-configured="{{ llmConfigured ? '1' : '0' }}"
+                    >
+                        <label class="flex flex-col gap-2 text-sm text-slate-300" for="llm-chat-input">
+                            Сообщение
+                            <textarea
+                                id="llm-chat-input"
+                                name="message"
+                                rows="3"
+                                class="w-full rounded-2xl border border-slate-800/80 bg-slate-950/60 px-4 py-3 font-medium text-slate-100 placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+                                placeholder="Опишите задачу или задайте вопрос…"
+                                {% if not llmConfigured %}disabled{% endif %}
+                            ></textarea>
+                        </label>
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <p id="llm-chat-status" class="min-h-[1.5rem] text-xs text-slate-500"></p>
+                            <button
+                                type="submit"
+                                class="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-300/60 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+                                {% if not llmConfigured %}disabled{% endif %}
+                            >
+                                Отправить
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+{% endblock %}

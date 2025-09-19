@@ -3,6 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Database\SqliteDB;
+use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
