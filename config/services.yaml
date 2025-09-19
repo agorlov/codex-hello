@@ -1,6 +1,9 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
+parameters:
+    app.sqlite.database_path: '%kernel.project_dir%/var/data/app.db'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -16,4 +19,8 @@ services:
             - '../src/Entity/'
             - '../src/Greeting/'
             - '../src/Kernel.php'
+
+    App\Database\SqliteDatetime:
+        arguments:
+            $databasePath: '%app.sqlite.database_path%'
 
