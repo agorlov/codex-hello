@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Database\SqliteDatetime;
 use App\Greeting\RandomCodexGreeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,14 @@ final class HelloController extends AbstractController
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
 
     /**
+     * Инициализирует контроллер источником времени SQLite.
+     */
+    public function __construct(
+        private readonly SqliteDatetime $sqliteDatetime,
+    ) {
+    }
+
+    /**
      * Формирует и возвращает оформленную приветственную страницу Codex.
      */
     #[Route('/', name: 'app_home')]
@@ -23,12 +32,14 @@ final class HelloController extends AbstractController
     {
         $language = $this->resolveLanguage($request);
         $randomGreeting = new RandomCodexGreeting($language);
+        $currentDateTime = $this->sqliteDatetime->currentDateTime();
 
         return $this->render('homepage.html.twig', [
             'greeting' => $randomGreeting->greet(),
             'pageTitle' => 'Codex приветствует вас',
             'introText' => 'Создайте свой первый проект, экспериментируйте с компонентами Symfony и украшайте интерфейсы при помощи Tailwind.',
             'documentationUrl' => 'https://symfony.com/doc/current/index.html',
+            'currentSqliteDateTime' => $currentDateTime,
             'highlights' => [
                 [
                     'title' => 'Symfony',

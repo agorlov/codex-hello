@@ -25,6 +25,15 @@ class HelloControllerTest extends WebTestCase
         $greetingsByLanguage = $this->getGreetingsByLanguage();
 
         $this->assertContains($greeting, $greetingsByLanguage['ru']);
+
+        $content = $client->getResponse()->getContent();
+
+        $this->assertNotFalse($content);
+        $this->assertStringContainsString('Текущее время по данным SQLite', $content);
+        $this->assertMatchesRegularExpression(
+            '/Текущее время по данным SQLite:\s*<span[^>]*>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}<\/span>/',
+            $content,
+        );
     }
 
     /**

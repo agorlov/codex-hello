@@ -30,6 +30,10 @@
                 </div>
                 <div class="space-y-6 text-slate-300 leading-relaxed">
                     <p>{{ introText }}</p>
+                    <p class="text-sm text-slate-400">
+                        Текущее время по данным SQLite:
+                        <span class="font-mono text-slate-200">{{ currentSqliteDateTime|date('Y-m-d H:i:s') }}</span>
+                    </p>
                     <div class="grid gap-4 sm:grid-cols-2">
                         {% for highlight in highlights %}
                             <div class="rounded-xl border border-slate-700/80 bg-slate-900/40 p-5">
