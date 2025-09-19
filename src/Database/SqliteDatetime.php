@@ -13,13 +13,11 @@ use Throwable;
  */
 final class SqliteDatetime
 {
-    private ?PDO $connection = null;
-
     /**
-     * Запоминает путь к SQLite-файлу для получения времени.
+     * Инициализирует источник времени объектом подключения SQLite.
      */
     public function __construct(
-        private readonly string $databasePath,
+        private readonly SqliteConnection $sqliteConnection,
     ) {
     }
 
@@ -28,7 +26,7 @@ final class SqliteDatetime
      */
     public function currentDateTime(): DateTimeImmutable
     {
-        $connection = $this->connection ??= $this->createConnection();
+        $connection = $this->sqliteConnection->db();
 
         try {
             $statement = $connection->query("SELECT datetime('now') AS current_datetime");
@@ -49,28 +47,4 @@ final class SqliteDatetime
         }
     }
 
-    /**
-     * Создаёт и настраивает PDO-подключение к файлу SQLite.
-     */
-    private function createConnection(): PDO
-    {
-        $directory = dirname($this->databasePath);
-
-        if (!is_dir($directory)) {
-            if (!mkdir($directory, 0777, true) && !is_dir($directory)) {
-                throw new RuntimeException(sprintf('Не удалось создать каталог "%s" для файла SQLite.', $directory));
-            }
-        }
-
-        try {
-            $connection = new PDO('sqlite:' . $this->databasePath);
-        } catch (PDOException $exception) {
-            throw new RuntimeException(sprintf('Не удалось открыть SQLite-файл "%s".', $this->databasePath), 0, $exception);
-        }
-
-        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-        return $connection;
-    }
 }
