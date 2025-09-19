@@ -12,16 +12,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class HelloControllerTest extends WebTestCase
 {
-    private string $databaseDirectory;
-
     private string $databasePath;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->databaseDirectory = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'db-data';
-        $this->databasePath = $this->databaseDirectory . DIRECTORY_SEPARATOR . 'app.db';
+        $this->databasePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app.db';
 
         $this->removeDatabaseArtifacts();
     }
@@ -29,10 +26,6 @@ class HelloControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->removeDatabaseArtifacts();
-
-        if (is_dir($this->databaseDirectory) && $this->isDirectoryEmpty($this->databaseDirectory)) {
-            rmdir($this->databaseDirectory);
-        }
 
         parent::tearDown();
     }
@@ -161,17 +154,4 @@ class HelloControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Проверяет, что каталог пустой (кроме псевдоссылок).
-     */
-    private function isDirectoryEmpty(string $directory): bool
-    {
-        $contents = scandir($directory);
-
-        if ($contents === false) {
-            return true;
-        }
-
-        return count(array_diff($contents, ['.', '..'])) === 0;
-    }
 }
