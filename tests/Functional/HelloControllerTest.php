@@ -3,7 +3,6 @@
 namespace App\Tests\Functional;
 
 use App\Database\SqliteDB;
-use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,8 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class HelloControllerTest extends WebTestCase
 {
-    private string $databaseDirectory;
-
     private string $databasePath;
 
     private string $migrationsDirectory;
@@ -37,10 +34,6 @@ class HelloControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->removeDatabaseArtifacts();
-
-        if (is_dir($this->databaseDirectory) && $this->isDirectoryEmpty($this->databaseDirectory)) {
-            rmdir($this->databaseDirectory);
-        }
 
         parent::tearDown();
     }
@@ -169,17 +162,4 @@ class HelloControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Проверяет, что каталог пустой (кроме псевдоссылок).
-     */
-    private function isDirectoryEmpty(string $directory): bool
-    {
-        $contents = scandir($directory);
-
-        if ($contents === false) {
-            return true;
-        }
-
-        return count(array_diff($contents, ['.', '..'])) === 0;
-    }
 }

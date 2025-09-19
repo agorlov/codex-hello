@@ -17,7 +17,9 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HelloController extends AbstractController
 {
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
-    private const DATABASE_PATH = __DIR__ . '/../../db-data/app.db';
+    private const DATABASE_PATH = __DIR__ . '/../../app.db';
+    private const MIGRATIONS_DIRECTORY = __DIR__ . '/../../db-data/migrations';
+
 
     private readonly SqliteDatetime $sqliteDatetime;
 
@@ -28,9 +30,9 @@ final class HelloController extends AbstractController
      */
     public function __construct()
     {
-        $sqliteConnection = new SqliteDB(self::DATABASE_PATH);
-
-        $this->sqliteDatetime = new SqliteDatetime($sqliteConnection);
+        $this->sqliteDatetime = new SqliteDatetime(
+            new SqliteDB(self::DATABASE_PATH)
+        );
         $this->visitLogbook = new VisitLogbook(
             new SqliteDB(self::DATABASE_PATH)
         );

@@ -52,7 +52,8 @@ class VisitLogbookTest extends TestCase
     public function testRecordVisitCreatesTableAndStoresEntry(): void
     {
         $sqliteConnection = new SqliteDB($this->databasePath);
-        $visitLogbook = new VisitLogbook($sqliteConnection);
+        $sqliteMigrations = new SqliteMigrations($sqliteConnection);
+        $visitLogbook = new VisitLogbook($sqliteConnection, $sqliteMigrations, $this->migrationsDirectory);
 
         $request = Request::create('/', 'GET', ['language' => 'ru'], [], [], [
             'HTTP_REFERER' => 'https://example.com/',
