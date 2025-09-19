@@ -1,16 +1,24 @@
 /* Скрипт для интерфейса LLM-чата на фронтенде. */
 
 (function () {
-    document.addEventListener('DOMContentLoaded', () => {
+    'use strict';
+
+    function initializeChat() {
         const form = document.getElementById('llm-chat-form');
         const input = document.getElementById('llm-chat-input');
         const messagesContainer = document.getElementById('llm-chat-messages');
         const statusElement = document.getElementById('llm-chat-status');
-        const submitButton = form ? form.querySelector('button[type="submit"]') : null;
 
         if (!form || !input || !messagesContainer) {
             return;
         }
+
+        if (form.dataset.enhanced === '1') {
+            return;
+        }
+        form.dataset.enhanced = '1';
+
+        const submitButton = form.querySelector('button[type="submit"]');
 
         const baseStatusClasses = statusElement
             ? statusElement.className
@@ -46,10 +54,6 @@
         }
 
         function appendMessage(role, content) {
-            if (!messagesContainer) {
-                return;
-            }
-
             const bubble = document.createElement('div');
             bubble.className =
                 role === 'user'
@@ -76,9 +80,7 @@
                 submitButton.setAttribute('aria-busy', isPending ? 'true' : 'false');
             }
 
-            if (input) {
-                input.disabled = shouldDisable;
-            }
+            input.disabled = shouldDisable;
 
             if (isPending) {
                 setStatus('Модель отвечает…', 'info');
@@ -141,5 +143,11 @@
                 setPending(false);
             }
         });
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeChat, { once: true });
+    } else {
+        initializeChat();
+    }
 })();
