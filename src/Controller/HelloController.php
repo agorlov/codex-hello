@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HelloController extends AbstractController
 {
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
+
     private const SQLITE_DATABASE_RELATIVE_PATH = '/db-data/app.db';
 
     private readonly SqliteDatetime $sqliteDatetime;
