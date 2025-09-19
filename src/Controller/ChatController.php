@@ -92,7 +92,7 @@ final class ChatController extends AbstractController
 
         $requestPayload = [
             'model' => self::LLM_MODEL,
-            'messages' => $normalizedMessages,
+            'messages' => $this->formatMessagesForApi($normalizedMessages),
         ];
 
         $requestBody = json_encode($requestPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -157,15 +157,25 @@ final class ChatController extends AbstractController
         $assistantMessage = null;
         if (isset($responseData['choices']) && is_array($responseData['choices'])) {
             foreach ($responseData['choices'] as $choice) {
-                if (
-                    is_array($choice)
-                    && isset($choice['message'])
-                    && is_array($choice['message'])
-                    && isset($choice['message']['content'])
-                    && is_string($choice['message']['content'])
-                ) {
-                    $assistantMessage = $choice['message']['content'];
+                if (!is_array($choice) || !isset($choice['message']) || !is_array($choice['message'])) {
+                    continue;
+                }
+
+                $message = $choice['message'];
+
+                if (isset($message['content']) && is_string($message['content'])) {
+                    $assistantMessage = $message['content'];
                     break;
+                }
+
+                if (isset($message['content']) && is_array($message['content'])) {
+                    $assistantMessage = $this->mergeTextParts($message['content']);
+
+                    if ($assistantMessage !== '') {
+                        break;
+                    }
+
+                    $assistantMessage = null;
                 }
             }
         }
@@ -201,4 +211,63 @@ final class ChatController extends AbstractController
 
         return 0;
     }
+
+    /**
+     * Преобразует список сообщений чата к формату, поддерживаемому API модели.
+     *
+     * @param array<int, array{role: string, content: string}> $messages
+     *
+     * @return array<int, array{role: string, content: array<int, array{type: string, text: string}>}>
+     */
+    private function formatMessagesForApi(array $messages): array
+    {
+        $prepared = [];
+
+        foreach ($messages as $message) {
+            $prepared[] = [
+                'role' => $message['role'],
+                'content' => [
+                    [
+                        'type' => 'text',
+                        'text' => $message['content'],
+                    ],
+                ],
+            ];
+        }
+
+        return $prepared;
+    }
+
+    /**
+     * Склеивает текстовые части ответа ассистента в одну строку.
+     *
+     * @param array<int, mixed> $parts
+     *
+     * @return string
+     */
+    private function mergeTextParts(array $parts): string
+    {
+        $fragments = [];
+
+        foreach ($parts as $part) {
+            if (!is_array($part)) {
+                continue;
+            }
+
+            $type = isset($part['type']) ? (string) $part['type'] : '';
+            if ($type !== 'text') {
+                continue;
+            }
+
+            $text = isset($part['text']) ? (string) $part['text'] : '';
+            if ($text === '') {
+                continue;
+            }
+
+            $fragments[] = $text;
+        }
+
+        return trim(implode("\n", $fragments));
+    }
+
 }
