@@ -2,6 +2,7 @@
 
 namespace App\Tests\Database;
 
+use App\Database\SqliteConnection;
 use App\Database\SqliteDatetime;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,8 @@ class SqliteDatetimeTest extends TestCase
         $databaseDirectory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'codex-sqlite-' . uniqid('', true);
         $databasePath = $databaseDirectory . DIRECTORY_SEPARATOR . 'time.db';
 
-        $sqliteDatetime = new SqliteDatetime($databasePath);
+        $sqliteConnection = new SqliteConnection($databasePath);
+        $sqliteDatetime = new SqliteDatetime($sqliteConnection);
         $dateTime = $sqliteDatetime->currentDateTime();
 
         $this->assertLessThan(5, abs($dateTime->getTimestamp() - time()));

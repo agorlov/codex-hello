@@ -20,7 +20,7 @@ services:
             - '../src/Greeting/'
             - '../src/Kernel.php'
 
-    App\Database\SqliteDatetime:
+    App\Database\SqliteConnection:
         arguments:
             $databasePath: '%app.sqlite.database_path%'
 
