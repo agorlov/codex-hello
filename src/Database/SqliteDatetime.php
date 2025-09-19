@@ -17,7 +17,7 @@ final class SqliteDatetime
      * Инициализирует источник времени объектом подключения SQLite.
      */
     public function __construct(
-        private readonly SqliteConnection $sqliteConnection,
+        private readonly SqliteDB $sqliteConnection,
     ) {
     }
 

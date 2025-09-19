@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Greeting\RandomCodexGreeting;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -123,7 +123,7 @@ class HelloControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $connection = $sqliteConnection->db();
 
         $countStatement = $connection->query('SELECT COUNT(*) AS aggregate FROM visit_log');
