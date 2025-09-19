@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteDatetime;
 use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
@@ -30,7 +30,7 @@ final class HelloController extends AbstractController
      */
     public function __construct()
     {
-        $sqliteConnection = new SqliteConnection(self::DATABASE_PATH);
+        $sqliteConnection = new SqliteDB(self::DATABASE_PATH);
         $sqliteMigrations = new SqliteMigrations($sqliteConnection);
 
         $this->sqliteDatetime = new SqliteDatetime($sqliteConnection);

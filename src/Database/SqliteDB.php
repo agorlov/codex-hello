@@ -9,7 +9,7 @@ use RuntimeException;
 /**
  * Поставщик PDO-подключения к файлу SQLite.
  */
-final class SqliteConnection
+final class SqliteDB
 {
     private ?PDO $connection = null;
 

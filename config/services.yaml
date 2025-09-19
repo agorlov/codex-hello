@@ -21,13 +21,13 @@ services:
             - '../src/Greeting/'
             - '../src/Kernel.php'
 
-    App\Database\SqliteConnection:
+    App\Database\SqliteDB:
         arguments:
             $databasePath: '%app.sqlite.database_path%'
 
     App\Database\SqliteMigrations:
         arguments:
-            $sqliteConnection: '@App\Database\SqliteConnection'
+            $sqliteConnection: '@App\Database\SqliteDB'
 
     App\VisitLogbook:
         arguments:

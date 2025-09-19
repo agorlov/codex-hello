@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteMigrations;
 use App\VisitLogbook;
 use PDO;
@@ -47,7 +47,7 @@ class VisitLogbookTest extends TestCase
      */
     public function testRecordVisitCreatesTableAndStoresEntry(): void
     {
-        $sqliteConnection = new SqliteConnection($this->databasePath);
+        $sqliteConnection = new SqliteDB($this->databasePath);
         $sqliteMigrations = new SqliteMigrations($sqliteConnection);
         $visitLogbook = new VisitLogbook($sqliteConnection, $sqliteMigrations, $this->migrationsDirectory);
 

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Database\SqliteConnection;
+use App\Database\SqliteDB;
 use App\Database\SqliteMigrations;
 use PDOException;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ final class VisitLogbook
      * Принимает подключение к SQLite, применяет миграции и готовит журнал посещений.
      */
     public function __construct(
-        private readonly SqliteConnection $sqliteConnection,
+        private readonly SqliteDB $sqliteConnection,
         private readonly SqliteMigrations $sqliteMigrations,
         private readonly string $migrationsDirectory,
     ) {
