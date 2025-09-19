@@ -29,7 +29,7 @@ services:
         arguments:
             $sqliteConnection: '@App\Database\SqliteDB'
 
-    App\VisitLogbook:
+    App\Command\ApplyMigrationsCommand:
         arguments:
             $migrationsDirectory: '%app.sqlite.migrations_path%'
 

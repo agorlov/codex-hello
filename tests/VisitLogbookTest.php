@@ -27,6 +27,10 @@ class VisitLogbookTest extends TestCase
         $this->databaseDirectory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'codex-visit-log-' . uniqid('', true);
         $this->databasePath = $this->databaseDirectory . DIRECTORY_SEPARATOR . 'visit-log.db';
         $this->migrationsDirectory = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'db-data' . DIRECTORY_SEPARATOR . 'migrations';
+
+        $sqliteConnection = new SqliteDB($this->databasePath);
+        $sqliteMigrations = new SqliteMigrations($sqliteConnection);
+        $sqliteMigrations->applyMigrations($this->migrationsDirectory);
     }
 
     protected function tearDown(): void
@@ -43,7 +47,7 @@ class VisitLogbookTest extends TestCase
     }
 
     /**
-     * Убеждается, что запись посещения создаёт таблицу и сохраняет данные.
+     * Убеждается, что запись посещения сохраняет данные в журнал.
      */
     public function testRecordVisitCreatesTableAndStoresEntry(): void
     {
@@ -77,4 +81,3 @@ class VisitLogbookTest extends TestCase
         $this->assertSame('Symfony BrowserKit', $row['user_agent']);
     }
 }
-

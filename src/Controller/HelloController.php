@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Database\SqliteDB;
 use App\Database\SqliteDatetime;
-use App\Database\SqliteMigrations;
 use App\Greeting\RandomCodexGreeting;
 use App\VisitLogbook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +20,7 @@ final class HelloController extends AbstractController
     private const DATABASE_PATH = __DIR__ . '/../../app.db';
     private const MIGRATIONS_DIRECTORY = __DIR__ . '/../../db-data/migrations';
 
+
     private readonly SqliteDatetime $sqliteDatetime;
 
     private readonly VisitLogbook $visitLogbook;
@@ -30,14 +30,11 @@ final class HelloController extends AbstractController
      */
     public function __construct()
     {
-        $sqliteConnection = new SqliteDB(self::DATABASE_PATH);
-        $sqliteMigrations = new SqliteMigrations($sqliteConnection);
-
-        $this->sqliteDatetime = new SqliteDatetime($sqliteConnection);
+        $this->sqliteDatetime = new SqliteDatetime(
+            new SqliteDB(self::DATABASE_PATH)
+        );
         $this->visitLogbook = new VisitLogbook(
-            $sqliteConnection,
-            $sqliteMigrations,
-            self::MIGRATIONS_DIRECTORY,
+            new SqliteDB(self::DATABASE_PATH)
         );
     }
 

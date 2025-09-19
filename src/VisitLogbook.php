@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Database\SqliteDB;
-use App\Database\SqliteMigrations;
 use PDOException;
 use Symfony\Component\HttpFoundation\Request;
 use RuntimeException;
@@ -13,15 +12,11 @@ use RuntimeException;
  */
 final class VisitLogbook
 {
-    private bool $schemaPrepared = false;
-
     /**
-     * Принимает подключение к SQLite, применяет миграции и готовит журнал посещений.
+     * Принимает подключение к SQLite и готовит журнал посещений для записей.
      */
     public function __construct(
         private readonly SqliteDB $sqliteConnection,
-        private readonly SqliteMigrations $sqliteMigrations,
-        private readonly string $migrationsDirectory,
     ) {
     }
 
@@ -31,8 +26,6 @@ final class VisitLogbook
     public function recordVisit(string $route, string $language, Request $request): void
     {
         $connection = $this->sqliteConnection->db();
-
-        $this->prepareSchema();
 
         try {
             $statement = $connection->prepare(
@@ -63,17 +56,4 @@ SQL
         }
     }
 
-    /**
-     * Обеспечивает применение SQL-миграций для журнала посещений.
-     */
-    private function prepareSchema(): void
-    {
-        if ($this->schemaPrepared) {
-            return;
-        }
-
-        $this->sqliteMigrations->applyMigrations($this->migrationsDirectory);
-
-        $this->schemaPrepared = true;
-    }
 }

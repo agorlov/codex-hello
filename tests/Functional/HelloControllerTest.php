@@ -14,13 +14,21 @@ class HelloControllerTest extends WebTestCase
 {
     private string $databasePath;
 
+    private string $migrationsDirectory;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->databasePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app.db';
+        $this->databaseDirectory = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'db-data';
+        $this->databasePath = $this->databaseDirectory . DIRECTORY_SEPARATOR . 'app.db';
+        $this->migrationsDirectory = $this->databaseDirectory . DIRECTORY_SEPARATOR . 'migrations';
 
         $this->removeDatabaseArtifacts();
+
+        $sqliteConnection = new SqliteDB($this->databasePath);
+        $sqliteMigrations = new SqliteMigrations($sqliteConnection);
+        $sqliteMigrations->applyMigrations($this->migrationsDirectory);
     }
 
     protected function tearDown(): void
