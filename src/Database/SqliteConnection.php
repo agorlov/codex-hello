@@ -7,7 +7,7 @@ use PDOException;
 use RuntimeException;
 
 /**
- * Представляет поставщика PDO-подключения к файлу SQLite.
+ * Поставщик PDO-подключения к файлу SQLite.
  */
 final class SqliteConnection
 {
