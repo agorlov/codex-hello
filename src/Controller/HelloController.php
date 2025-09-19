@@ -17,25 +17,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HelloController extends AbstractController
 {
     private const DEFAULT_GREETING_LANGUAGE = 'ru';
-    private const DATABASE_PATH = __DIR__ . '/../../app.db';
-    private const MIGRATIONS_DIRECTORY = __DIR__ . '/../../db-data/migrations';
-
+    private const SQLITE_DATABASE_RELATIVE_PATH = '/db-data/app.db';
 
     private readonly SqliteDatetime $sqliteDatetime;
-
     private readonly VisitLogbook $visitLogbook;
 
     /**
-     * Инициализирует контроллер источником времени SQLite и журналом посещений.
+     * Собирает контроллер с собственными объектами работы с SQLite.
      */
     public function __construct()
     {
-        $this->sqliteDatetime = new SqliteDatetime(
-            new SqliteDB(self::DATABASE_PATH)
-        );
-        $this->visitLogbook = new VisitLogbook(
-            new SqliteDB(self::DATABASE_PATH)
-        );
+        $projectDirectory = dirname(__DIR__, 2);
+        $sqliteDatabase = new SqliteDB($projectDirectory . self::SQLITE_DATABASE_RELATIVE_PATH);
+
+        $this->sqliteDatetime = new SqliteDatetime($sqliteDatabase);
+        $this->visitLogbook = new VisitLogbook($sqliteDatabase);
     }
 
     /**
