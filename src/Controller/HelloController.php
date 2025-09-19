@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Greeting\RandomCodexGreeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -11,14 +13,19 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class HelloController extends AbstractController
 {
+    private const DEFAULT_GREETING_LANGUAGE = 'ru';
+
     /**
      * Формирует и возвращает оформленную приветственную страницу Codex.
      */
     #[Route('/', name: 'app_home')]
-    public function __invoke(): Response
+    public function index(Request $request): Response
     {
+        $language = $this->resolveLanguage($request);
+        $randomGreeting = new RandomCodexGreeting($language);
+
         return $this->render('homepage.html.twig', [
-            'greeting' => 'Hello codex!',
+            'greeting' => $randomGreeting->greet(),
             'pageTitle' => 'Codex приветствует вас',
             'introText' => 'Создайте свой первый проект, экспериментируйте с компонентами Symfony и украшайте интерфейсы при помощи Tailwind.',
             'documentationUrl' => 'https://symfony.com/doc/current/index.html',
@@ -41,5 +48,25 @@ final class HelloController extends AbstractController
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Определяет язык приветствий на основе параметра запроса или умолчания.
+     */
+    private function resolveLanguage(Request $request): string
+    {
+        $languageParameter = $request->query->getAlpha('language');
+
+        if ($languageParameter === null || $languageParameter === '') {
+            return self::DEFAULT_GREETING_LANGUAGE;
+        }
+
+        $language = strtolower($languageParameter);
+
+        if (RandomCodexGreeting::isLanguageSupported($language)) {
+            return $language;
+        }
+
+        return self::DEFAULT_GREETING_LANGUAGE;
     }
 }
