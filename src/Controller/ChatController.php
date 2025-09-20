@@ -51,7 +51,23 @@ final class ChatController extends AbstractController
             ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        $decoded = json_decode($request->getContent(), true);
+        // Проверяем, что запрос содержит JSON
+        $contentType = $request->headers->get('Content-Type', '');
+        if (!str_contains($contentType, 'application/json')) {
+            return new JsonResponse([
+                'error' => 'Неверный тип содержимого. Ожидается application/json.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Парсим JSON из тела запроса
+        $content = $request->getContent();
+        if (empty($content)) {
+            return new JsonResponse([
+                'error' => 'Пустой запрос. Ожидалось содержимое JSON.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $decoded = json_decode($content, true);
         if (!is_array($decoded)) {
             return new JsonResponse([
                 'error' => 'Некорректный формат запроса. Ожидался JSON.',
@@ -147,6 +163,13 @@ final class ChatController extends AbstractController
                 } elseif (is_string($responseData['error'])) {
                     $errorText = $responseData['error'];
                 }
+            }
+            
+            // Улучшенная обработка ошибок авторизации
+            if ($statusCode === 401) {
+                $errorText = 'Ошибка авторизации API. Проверьте правильность ключа API.';
+            } elseif ($statusCode === 403) {
+                $errorText = 'Доступ запрещен. Ключ API может не иметь необходимых прав.';
             }
 
             return new JsonResponse([
