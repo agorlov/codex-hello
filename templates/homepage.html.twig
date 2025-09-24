@@ -36,14 +36,26 @@
                     </p>
                     <div class="grid gap-4 sm:grid-cols-2">
                         {% for highlight in highlights %}
-                            <div class="rounded-xl border border-slate-700/80 bg-slate-900/40 p-5">
-                                <h2 class="text-lg font-medium text-sky-300 mb-2">
-                                    {{ highlight.title }}
-                                </h2>
-                                <p class="text-sm text-slate-400">
-                                    {{ highlight.description }}
-                                </p>
-                            </div>
+                            <a
+                                href="{{ highlight.url }}"
+                                class="group flex h-full flex-col justify-between rounded-xl border border-slate-700/80 bg-slate-900/40 p-5 transition hover:border-sky-400/80 hover:bg-slate-900/70 hover:shadow-lg"
+                            >
+                                <div>
+                                    <h2 class="text-lg font-medium text-sky-300 mb-2">
+                                        {{ highlight.title }}
+                                    </h2>
+                                    <p class="text-sm text-slate-400">
+                                        {{ highlight.description }}
+                                    </p>
+                                </div>
+                                <span class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition group-hover:text-sky-200">
+                                    {{ highlight.cta }}
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M5 12h14" />
+                                        <path d="m13 6 6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
