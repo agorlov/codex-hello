@@ -56,20 +56,16 @@ final class HelloController extends AbstractController
             'currentSqliteDateTime' => $currentDateTime,
             'highlights' => [
                 [
-                    'title' => 'Symfony',
-                    'description' => 'Современный PHP-фреймворк, который помогает строить мощные и устойчивые приложения.',
+                    'title' => 'LLM-чат Codex',
+                    'description' => 'Общайтесь с моделью напрямую из браузера и получайте развёрнутые ответы на вопросы.',
+                    'url' => $this->generateUrl('app_llm_chat'),
+                    'cta' => 'Открыть обычный чат',
                 ],
                 [
-                    'title' => 'Tailwind CSS',
-                    'description' => 'Утилитарный CSS-фреймворк, позволяющий быстро создавать аккуратные интерфейсы без лишнего кода.',
-                ],
-                [
-                    'title' => 'Быстрый старт',
-                    'description' => 'Используйте примеры, чтобы ускорить знакомство с фреймворком и его экосистемой.',
-                ],
-                [
-                    'title' => 'Комьюнити',
-                    'description' => 'Делитесь находками и задавайте вопросы сообществу Codex и Symfony.',
+                    'title' => 'Стриминговый чат',
+                    'description' => 'Наблюдайте за ответом модели в реальном времени благодаря потоковой передаче.',
+                    'url' => $this->generateUrl('app_llm_chat_stream'),
+                    'cta' => 'Перейти к стримингу',
                 ],
             ],
         ]);
