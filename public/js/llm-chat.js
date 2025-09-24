@@ -92,6 +92,28 @@
             return;
         }
 
+        input.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' || event.isComposing) {
+                return;
+            }
+
+            if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) {
+                return;
+            }
+
+            if (submitButton && submitButton.disabled) {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
+                form.submit();
+            }
+        });
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
